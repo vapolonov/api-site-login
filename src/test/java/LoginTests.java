@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Cookie;
 
 import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.value;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
@@ -19,19 +20,22 @@ public class LoginTests {
         Configuration.baseUrl = "http://demowebshop.tricentis.com/";
     }
 
+    String email = "test75@test.com";
+    String password = "1234567";
+
     @Test
     void loginUiTest() {
         step("Open login page", () ->
                 open("login"));
 
         step("Fill login form", () -> {
-            $("#Email").setValue("test75@test.com");
-            $("#Password").setValue("123456")
+            $("#Email").setValue(email);
+            $("#Password").setValue(password)
                     .pressEnter();
         });
 
         step("Verify successful authorization", () ->
-                $(".account").shouldHave(text("test75@test.com"))
+                $(".account").shouldHave(text(email))
         );
     }
 
@@ -41,8 +45,8 @@ public class LoginTests {
             String authorizationCookie =
                     given()
                             .contentType("application/x-www-form-urlencoded; charset=UTF-8")
-                            .formParam("Email", "test75@test.com")
-                            .formParam("Password", "123456")
+                            .formParam("Email", email)
+                            .formParam("Password", password)
                             .when()
                             .post("login")
                             .then()
@@ -55,15 +59,24 @@ public class LoginTests {
 
             step("Set cookie to to browser", () ->
                     getWebDriver().manage().addCookie(
-                            new Cookie("NOPCOMMERCE.AUTH", authorizationCookie))
-            );
+                            new Cookie("NOPCOMMERCE.AUTH", authorizationCookie)));
         });
+
         step("Open main page", () ->
-                open("")
-        );
+                open(""));
 
         step("Verify successful authorization", () ->
-                $(".account").shouldHave(text("test75@test.com"))
-        );
+                $(".account").shouldHave(text(email)));
+
+        step("Open Customer Info", () ->
+                open("http://demowebshop.tricentis.com/customer/info"));
+
+        step("Check firstname", () ->
+                $("#FirstName").shouldHave(value("Vasiliy")));
+
+        step("Check lastname", () ->
+                $("#LastName").shouldHave(value("Apolonov")));
+        step("Check email", () ->
+                $("#Email").shouldHave(value(email)));
     }
 }

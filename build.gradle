@@ -21,8 +21,8 @@ dependencies {
             "org.assertj:assertj-core:3.22.0")
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junitVersion"
 }
-
-/* allure {
+/*
+ allure {
     version = allureVersion
     autoconfigure = true
     aspectjweaver = true
@@ -32,6 +32,7 @@ dependencies {
     }
 }
  */
+
 
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'

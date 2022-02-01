@@ -2,10 +2,12 @@ import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.Cookie;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
+import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static io.qameta.allure.Allure.step;
 import static io.restassured.RestAssured.baseURI;
 import static io.restassured.RestAssured.given;
@@ -38,8 +40,5 @@ public class DemowebshopTests {
                         .body("updatetopcartsectionhtml", is("(1)"))
                         .extract().response();
         System.out.println("Response: " + response.asString());
-
-        open(baseURI);
-        $(".cart-qty").shouldHave(text("(1)"));
     }
 }
